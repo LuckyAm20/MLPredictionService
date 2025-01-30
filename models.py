@@ -31,7 +31,8 @@ class BalanceManager:
     def __init__(self, initial_balance: float = 0.0):
         self.__balance = initial_balance
 
-    def get_balance(self) -> float:
+    @property
+    def balance(self) -> float:
         return self.__balance
 
     def top_up_funds(self, amount: float) -> None:
@@ -51,19 +52,24 @@ class User:
         self.__transaction_history = TransactionManager()
         self.__prediction_history = PredictionManager()
 
-    def get_id(self) -> int:
+    @property
+    def user_id(self) -> int:
         return self.__user_id
 
-    def get_username(self) -> str:
+    @property
+    def username(self) -> str:
         return self.__username
 
-    def get_balance_manager(self) -> BalanceManager:
+    @property
+    def balance_manager(self) -> BalanceManager:
         return self.__balance_manager
 
-    def get_transaction_history(self) -> "TransactionManager":
+    @property
+    def transaction_history(self) -> "TransactionManager":
         return self.__transaction_history
 
-    def get_prediction_history(self) -> "PredictionManager":
+    @property
+    def prediction_history(self) -> "PredictionManager":
         return self.__prediction_history
 
 
@@ -75,7 +81,8 @@ class HistoryManager(ABC):
     def add_entry(self, *args, **kwargs):
         pass
 
-    def get_history(self) -> list[dict]:
+    @property
+    def history(self) -> list[dict]:
         return self._history
 
 
@@ -113,5 +120,6 @@ class MLTask:
     def process_task(self) -> None:
         pass
 
-    def get_status(self) -> TaskStatus:
+    @property
+    def status(self) -> TaskStatus:
         return self.__status
