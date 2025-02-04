@@ -1,6 +1,7 @@
-FROM python:3.11-slim
+FROM python:3.11
 
 WORKDIR /app
+ENV PYTHONPATH=/app
 
 COPY requirements.txt /app/
 
