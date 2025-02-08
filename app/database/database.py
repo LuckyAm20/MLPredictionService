@@ -12,17 +12,16 @@ engine = create_engine(
 )
 
 
-@contextmanager
 def get_session():
-    session = Session(engine)
+    db = Session(engine)
     try:
-        yield session
-        session.commit()
+        yield db
+        db.commit()
     except Exception as e:
-        session.rollback()
+        db.rollback()
         raise e
     finally:
-        session.close()
+        db.close()
 
 
 def init_db():

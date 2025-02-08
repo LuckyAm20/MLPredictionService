@@ -10,6 +10,9 @@ services:
       - .env
     volumes:
       - ./app:/app
+      - ./models:/app/models
+    ports:
+    - "8082:8080"
     depends_on:
       - database
       - rabbitmq

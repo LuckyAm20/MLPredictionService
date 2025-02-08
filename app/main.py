@@ -1,6 +1,6 @@
-from models.user import User
-from models.ml_model import ResNet50Model
-from models.ml_task import MLTask
+from models_class.user import User
+from models_class.ml_model import ResNet50Model
+from models_class.ml_task import MLTask
 
 from database.database import init_db, get_session
 from services.crud.user import create_user, get_all_users, update_user_balance

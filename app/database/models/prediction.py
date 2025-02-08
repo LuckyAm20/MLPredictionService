@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 class Prediction(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="user.id")
+    selected_model: Optional[str] = Field(default=None)
     image_path: str
     result: Optional[str] = None
     status: str = Field(default="pending")

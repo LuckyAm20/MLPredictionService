@@ -30,3 +30,8 @@ def update_user_balance(user_id: int, amount: float, session: Session) -> Option
         session.commit()
         return user
     return None
+
+
+def update_user_model(user: User, model_name: str, session: Session):
+    user.selected_model = model_name
+    session.commit()
