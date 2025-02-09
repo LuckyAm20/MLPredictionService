@@ -35,7 +35,9 @@ async def signup(data: UserCreate, session: Session = Depends(get_session)):
     session.commit()
     session.refresh(user)
 
-    return {"message": "Регистрация успешна"}
+    return {"message": "Регистрация успешна",
+            "user_id": user.id
+            }
 
 
 @user_router.post("/signin")
@@ -62,8 +64,8 @@ class BalanceTopUpRequest(BaseModel):
     amount: float
 
 
-@user_router.post("/balance/topup")
-async def topup_balance(data: BalanceTopUpRequest, session: Session = Depends(get_session)):
+@user_router.post("/balance/deposit")
+async def deposit_balance(data: BalanceTopUpRequest, session: Session = Depends(get_session)):
     update_user_balance(data.user_id, data.amount, session)
     transaction = create_transaction(user_id=data.user_id, amount=data.amount, session=session)
     user = get_user_by_id(data.user_id, session)

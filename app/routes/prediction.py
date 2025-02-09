@@ -11,6 +11,8 @@ from torchvision import transforms
 from PIL import Image
 import io
 
+from models_class.ml_model import MLModel
+
 prediction_router = APIRouter(tags=["Prediction"])
 
 models = {
@@ -45,19 +47,19 @@ async def predict(user_id: int, file: UploadFile = File(...), session: Session =
 
     model = load_model(user.selected_model)
 
+    ml_model = MLModel(model)
+
     image = Image.open(io.BytesIO(await file.read())).convert("RGB")
     image = transform(image).unsqueeze(0)
 
-    with torch.no_grad():
-        output = model(image)
-        predicted_class = output.argmax().item()
+    predicted_class = ml_model.predict(image)
 
     cost = 10
 
     prediction = create_prediction(user_id, user.selected_model, file.filename, labels[predicted_class], cost, session)
 
     if user.balance >= cost:
-        update_user_balance(user_id, -10, session)
+        update_user_balance(user_id, -cost, session)
     else:
         raise HTTPException(status_code=404,
                             detail=f"Недостаточно средств. "
