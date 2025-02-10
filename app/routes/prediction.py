@@ -13,6 +13,12 @@ import io
 
 from models_class.ml_model import MLModel
 
+from models_class.ml_task import MLTask
+
+from services.crud.prediction import get_next_prediction_id
+
+from models_class.user import User
+
 prediction_router = APIRouter(tags=["Prediction"])
 
 models = {
@@ -45,18 +51,16 @@ async def predict(user_id: int, file: UploadFile = File(...), session: Session =
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Модель не выбрана")
 
-    model = load_model(user.selected_model)
-
-    ml_model = MLModel(model)
+    cost = 10
 
     image = Image.open(io.BytesIO(await file.read())).convert("RGB")
     image = transform(image).unsqueeze(0)
 
-    predicted_class = ml_model.predict(image)
+    ml_task = MLTask(User(user_id, user.username, user.balance), get_next_prediction_id(session), image,
+                     file.filename, MLModel(load_model(user.selected_model)), cost)
+    ml_task.process_task()
 
-    cost = 10
-
-    prediction = create_prediction(user_id, user.selected_model, file.filename, labels[predicted_class], cost, session)
+    prediction = create_prediction(user_id, user.selected_model, file.filename, labels[ml_task.result], cost, session)
 
     if user.balance >= cost:
         update_user_balance(user_id, -cost, session)
@@ -68,7 +72,7 @@ async def predict(user_id: int, file: UploadFile = File(...), session: Session =
     return {
         "message": "Предсказание выполнено",
         "prediction_id": prediction.id,
-        "result": labels[predicted_class]
+        "result": labels[ml_task.result]
     }
 
 

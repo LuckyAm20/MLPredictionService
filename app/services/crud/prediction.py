@@ -1,4 +1,4 @@
-from sqlmodel import Session, select
+from sqlmodel import Session, select, func
 from database.models.user import Prediction
 from typing import Optional
 
@@ -35,3 +35,8 @@ def get_model_by_id(user_id: int, session: Session) -> User:
     if user and user.selected_model:
         return user
     return None
+
+
+def get_next_prediction_id(session: Session) -> int:
+    max_id = session.exec(select(func.max(Prediction.id))).one_or_none()
+    return (max_id or 0) + 1
