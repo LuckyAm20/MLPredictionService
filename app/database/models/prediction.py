@@ -1,8 +1,10 @@
 from __future__ import annotations
+
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING, Optional
+
 from sqlalchemy.orm import Mapped
-from sqlmodel import SQLModel, Field, Relationship
-from datetime import datetime, UTC
-from typing import Optional, TYPE_CHECKING
+from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
     from .user import User
@@ -22,4 +24,8 @@ class Prediction(SQLModel, table=True):
 
     def update_status(self, new_status: str):
         self.status = new_status
+        self.timestamp = datetime.now(UTC)
+
+    def update_result(self, new_result: str):
+        self.result = new_result
         self.timestamp = datetime.now(UTC)

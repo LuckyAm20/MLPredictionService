@@ -1,13 +1,13 @@
-from fastapi import APIRouter, HTTPException, status, Depends
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
+import bcrypt
 from database.database import get_session
 from database.models.user import User
-from services.crud.user import create_user, get_user_by_username, get_all_users
-from services.crud.user import get_user_by_id, update_user_balance, update_user_model
-import bcrypt
-
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel
 from services.crud.transaction import create_transaction
+from services.crud.user import (create_user, get_all_users, get_user_by_id,
+                                get_user_by_username, update_user_balance,
+                                update_user_model)
+from sqlalchemy.orm import Session
 
 user_router = APIRouter(tags=["User"])
 

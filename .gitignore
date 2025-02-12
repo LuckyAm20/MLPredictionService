@@ -242,3 +242,5 @@ cython_debug/
 data
 app/.dvc
 app/models
+app/temp_images
+app/logs

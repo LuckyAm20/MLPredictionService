@@ -1,5 +1,5 @@
-from sqlmodel import Session, select
 from database.models.user import Transaction
+from sqlmodel import Session, select
 
 
 def create_transaction(user_id: int, amount: float, session: Session) -> Transaction:

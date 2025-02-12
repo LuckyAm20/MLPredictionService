@@ -1,6 +1,7 @@
-from sqlmodel import Session, select
-from database.models.user import User
 from typing import Optional
+
+from database.models.user import User
+from sqlmodel import Session, select
 
 
 def get_all_users(session: Session) -> list[User]:

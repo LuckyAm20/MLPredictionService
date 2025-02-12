@@ -1,5 +1,7 @@
-from sqlmodel import SQLModel, Session, create_engine
 from contextlib import contextmanager
+
+from sqlmodel import Session, SQLModel, create_engine
+
 from .config import get_settings
 
 settings = get_settings()

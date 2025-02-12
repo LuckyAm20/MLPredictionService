@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING, Optional
+
 from sqlalchemy.orm import Mapped
-from sqlmodel import SQLModel, Field, Relationship
-from datetime import datetime, UTC
-from typing import Optional, TYPE_CHECKING
+from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
     from .user import User

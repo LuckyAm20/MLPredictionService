@@ -1,10 +1,9 @@
+import uvicorn
+from database.database import init_db
 from fastapi import FastAPI
-from routes.user import user_router
 from routes.prediction import prediction_router
 from routes.transaction import transaction_router
-from database.database import init_db
-import uvicorn
-
+from routes.user import user_router
 
 app = FastAPI(title="ML Service API")
 

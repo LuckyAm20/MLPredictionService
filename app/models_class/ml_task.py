@@ -1,7 +1,8 @@
 from typing import Optional
-from .user import User
-from .ml_model import MLModel
+
 from .enums import TaskStatus
+from .ml_model import MLModel
+from .user import User
 
 
 class MLTask:

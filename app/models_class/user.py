@@ -1,5 +1,5 @@
 from .balance import BalanceManager
-from .history import TransactionManager, PredictionManager
+from .history import PredictionManager, TransactionManager
 
 
 class User:

@@ -1,8 +1,8 @@
-from sqlmodel import Session, select, func
-from database.models.user import Prediction
 from typing import Optional
 
-from database.models.user import User
+from database.models.user import Prediction, User
+from models_class.enums import TaskStatus
+from sqlmodel import Session, func, select
 
 
 def create_prediction(user_id: int, model: str, image_path: str, result: str, cost: float, session: Session) -> Prediction:
@@ -17,10 +17,19 @@ def get_predictions_by_user(user_id: int, session: Session) -> list[Prediction]:
     return session.exec(select(Prediction).where(Prediction.user_id == user_id)).all()
 
 
-def update_prediction_status(prediction_id: int, new_status: str, session: Session) -> Optional[Prediction]:
+def update_prediction_status(prediction_id: int, new_status: TaskStatus, session: Session) -> Optional[Prediction]:
     prediction = session.get(Prediction, prediction_id)
     if prediction:
-        prediction.update_status(new_status)
+        prediction.update_status(new_status.value)
+        session.commit()
+        return prediction
+    return None
+
+
+def update_prediction_result(prediction_id: int, new_result: str, session: Session) -> Optional[Prediction]:
+    prediction = session.get(Prediction, prediction_id)
+    if prediction:
+        prediction.update_result(new_result)
         session.commit()
         return prediction
     return None
@@ -40,3 +49,7 @@ def get_model_by_id(user_id: int, session: Session) -> User:
 def get_next_prediction_id(session: Session) -> int:
     max_id = session.exec(select(func.max(Prediction.id))).one_or_none()
     return (max_id or 0) + 1
+
+
+def get_prediction_by_id(prediction_id: int, session: Session) -> Optional[Prediction]:
+    return session.get(Prediction, prediction_id)

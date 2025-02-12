@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional, List
+from typing import List, Optional
 
+from sqlmodel import Field, Relationship, SQLModel
 
-from .transaction import Transaction
 from .prediction import Prediction
+from .transaction import Transaction
 
 
 class User(SQLModel, table=True):

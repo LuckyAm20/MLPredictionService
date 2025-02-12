@@ -1,11 +1,11 @@
-from models_class.user import User
+from database.database import get_session, init_db
 from models_class.ml_model import ResNet50Model
 from models_class.ml_task import MLTask
-
-from database.database import init_db, get_session
-from services.crud.user import create_user, get_all_users, update_user_balance
-from services.crud.transaction import create_transaction, get_transactions_by_user
+from models_class.user import User
 from services.crud.prediction import create_prediction, get_predictions_by_user
+from services.crud.transaction import (create_transaction,
+                                       get_transactions_by_user)
+from services.crud.user import create_user, get_all_users, update_user_balance
 
 
 def test_database():
