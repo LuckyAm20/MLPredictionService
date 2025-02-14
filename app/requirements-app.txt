@@ -17,3 +17,5 @@ bcrypt
 python-multipart
 asyncio
 pika
+python-jose
+passlib[bcrypt]

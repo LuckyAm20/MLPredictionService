@@ -51,5 +51,7 @@ def get_next_prediction_id(session: Session) -> int:
     return (max_id or 0) + 1
 
 
-def get_prediction_by_id(prediction_id: int, session: Session) -> Optional[Prediction]:
-    return session.get(Prediction, prediction_id)
+def get_prediction_by_id(prediction_id: int, user_id: int, session: Session) -> Optional[Prediction]:
+    return session.exec(
+        select(Prediction).where(Prediction.id == prediction_id, Prediction.user_id == user_id)
+    ).first()

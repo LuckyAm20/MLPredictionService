@@ -2,8 +2,7 @@ import json
 
 import pika
 from services.crud.prediction import create_prediction
-
-RABBITMQ_HOST = "rabbitmq"
+from workers.connection import RABBITMQ_HOST, get_rabbitmq_connection
 
 
 def publish_prediction_task(user, image_path: str, model_name: str, cost: float, prediction_id, session):
@@ -17,10 +16,7 @@ def publish_prediction_task(user, image_path: str, model_name: str, cost: float,
         "cost": cost
     }
 
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
-    channel = connection.channel()
-
-    channel.queue_declare(queue="ml_tasks", durable=True)
+    connection, channel = get_rabbitmq_connection("ml_tasks")
 
     channel.basic_publish(
         exchange="",

@@ -15,6 +15,7 @@ from services.crud.prediction import (update_prediction_result,
                                       update_prediction_status)
 from services.crud.user import get_user_by_id, update_user_balance
 from torchvision import transforms
+from workers.connection import RABBITMQ_HOST, get_rabbitmq_connection
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -24,8 +25,6 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
-
-RABBITMQ_HOST = "rabbitmq"
 
 models = {}
 label_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "models", "imagenet-simple-labels.json")
@@ -59,15 +58,6 @@ def process_prediction(task_data):
     with next(get_session()) as session:
         try:
             user = get_user_by_id(task_data["user_id"], session)
-            if not user:
-                logging.error(f"Пользователь {task_data['user_id']} не найден.")
-                update_prediction_status(task_data["task_id"], TaskStatus.FAILED, session)
-                return
-
-            if user.balance < task_data["cost"]:
-                logging.warning(f"Недостаточно средств у пользователя {task_data['user_id']}. Баланс: {user.balance}")
-                update_prediction_status(task_data["task_id"], TaskStatus.FAILED, session)
-                return
 
             with open(task_data["image_path"], "rb") as img_file:
                 image_bytes = img_file.read()
@@ -108,9 +98,7 @@ def callback(ch, method, properties, body):
 
 def start_worker():
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
-        channel = connection.channel()
-        channel.queue_declare(queue="ml_tasks", durable=True)
+        connection, channel = get_rabbitmq_connection("ml_tasks")
         channel.basic_qos(prefetch_count=1)
         channel.basic_consume(queue="ml_tasks", on_message_callback=callback)
 
