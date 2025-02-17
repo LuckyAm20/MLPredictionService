@@ -10,13 +10,13 @@ from services.crud.user import get_user_by_id, update_user_balance
 from sqlalchemy.orm import Session
 from workers.publisher import publish_prediction_task
 
-from services.auth import get_current_user
+from services.auth import get_current_user_api
 
 prediction_router = APIRouter(tags=["Prediction"])
 
 
 @prediction_router.post("/")
-async def predict(file: UploadFile = File(...), session: Session = Depends(get_session), user=Depends(get_current_user)):
+async def predict(file: UploadFile = File(...), session: Session = Depends(get_session), user=Depends(get_current_user_api)):
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Модель не выбрана")
 
@@ -44,7 +44,7 @@ async def predict(file: UploadFile = File(...), session: Session = Depends(get_s
 
 
 @prediction_router.get("/{prediction_id}")
-async def get_prediction(prediction_id: int, session: Session = Depends(get_session), user=Depends(get_current_user)):
+async def get_prediction(prediction_id: int, session: Session = Depends(get_session), user=Depends(get_current_user_api)):
     prediction = get_prediction_by_id(prediction_id, user.id, session)
     if not prediction:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Предсказание не найдено")
@@ -59,7 +59,7 @@ async def get_prediction(prediction_id: int, session: Session = Depends(get_sess
 
 
 @prediction_router.get("/history/")
-async def prediction_history(session: Session = Depends(get_session), user=Depends(get_current_user)):
+async def prediction_history(session: Session = Depends(get_session), user=Depends(get_current_user_api)):
     predictions = get_predictions_by_user(user.id, session)
     if not predictions:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="История предсказаний пуста")

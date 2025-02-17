@@ -12,7 +12,7 @@ from services.crud.user import (create_user, get_all_users, get_user_by_id,
                                 update_user_model)
 from sqlalchemy.orm import Session
 
-from services.auth import create_access_token, get_current_user
+from services.auth import create_access_token, get_current_user_api
 
 user_router = APIRouter(tags=["User"])
 
@@ -66,7 +66,7 @@ async def signin(data: UserCreate, session: Session = Depends(get_session)):
 
 
 @user_router.get("/balance")
-async def get_balance(session: Session = Depends(get_session), user=Depends(get_current_user)):
+async def get_balance(session: Session = Depends(get_session), user=Depends(get_current_user_api)):
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Пользователь не найден")
 
@@ -74,7 +74,7 @@ async def get_balance(session: Session = Depends(get_session), user=Depends(get_
 
 
 @user_router.post("/balance/deposit/{amount}")
-async def deposit_balance(amount: int, session: Session = Depends(get_session), user=Depends(get_current_user)):
+async def deposit_balance(amount: int, session: Session = Depends(get_session), user=Depends(get_current_user_api)):
     update_user_balance(user.id, amount, session)
     transaction = create_transaction(user_id=user.id, amount=amount, session=session)
     return {
@@ -85,7 +85,7 @@ async def deposit_balance(amount: int, session: Session = Depends(get_session), 
 
 
 @user_router.post("/select_model")
-async def select_model(data: ModelSelect, session: Session = Depends(get_session), user=Depends(get_current_user)):
+async def select_model(data: ModelSelect, session: Session = Depends(get_session), user=Depends(get_current_user_api)):
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Пользователь не найден")
 
