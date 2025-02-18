@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+import bcrypt
 from sqlmodel import Field, Relationship, SQLModel
 
 from .prediction import Prediction

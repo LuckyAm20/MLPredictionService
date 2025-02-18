@@ -16,8 +16,9 @@ def get_user_by_username(username: str, session: Session) -> Optional[User]:
     return session.exec(select(User).where(User.username == username)).first()
 
 
-def create_user(username: str, role: str, balance: float, session: Session) -> User:
+def create_user(username: str, password: str, role: str, balance: float, session: Session) -> User:
     new_user = User(username=username, role=role, balance=balance)
+    new_user.set_password(password)
     session.add(new_user)
     session.commit()
     session.refresh(new_user)
