@@ -1,4 +1,4 @@
-from database.models.user import Transaction
+from database.models.transaction import Transaction
 from sqlmodel import Session, select
 
 

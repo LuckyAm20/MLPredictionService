@@ -63,11 +63,10 @@ services:
       timeout: 5s
       retries: 5
 
-  worker1:
+  worker:
     build:
       context: ./app
       dockerfile: Dockerfile.worker
-    container_name: worker1
     environment:
       - PYTHONPATH=/app
     env_file:
@@ -80,23 +79,6 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    restart: on-failure
-
-  worker2:
-    build:
-      context: ./app
-      dockerfile: Dockerfile.worker
-    container_name: worker2
-    environment:
-      - PYTHONPATH=/app
-    env_file:
-      - .env
-    volumes:
-      - ./app:/app
-      - ./models:/app/models
-    depends_on:
-      database:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+    deploy:
+      replicas: 2
     restart: on-failure

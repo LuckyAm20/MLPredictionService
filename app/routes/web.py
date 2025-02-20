@@ -1,33 +1,23 @@
 import os
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, Form, Request, UploadFile, File, HTTPException
+from database.database import get_session
+from fastapi import (APIRouter, Depends, File, Form, HTTPException, Request,
+                     UploadFile, status)
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
-from fastapi import status
-from database.database import get_session
-from services.auth import get_current_user, get_token_for_user
-from services.crud.user import get_user_by_username, create_user, update_user_balance, update_user_model
+from routes.user import UserCreate, deposit_balance, get_token, signin, signup
+from services.auth import (create_access_token, get_current_user,
+                           get_token_for_user)
+from services.crud.prediction import (get_next_prediction_id,
+                                      get_predictions_by_user)
 from services.crud.transaction import get_transactions_by_user
-from services.crud.prediction import get_predictions_by_user
+from services.crud.user import (create_user, get_user_by_username,
+                                update_user_balance, update_user_model)
+from sqlalchemy.orm import Session
 from workers.publisher import publish_prediction_task
-
-from services.crud.prediction import get_next_prediction_id
-
-from routes.user import signup
-
-from routes.user import get_token
-
-from routes.user import UserCreate
-
-from routes.user import signin
-
-from services.auth import create_access_token
-
-from routes.user import deposit_balance
 
 web_router = APIRouter(tags=["Web"])
 templates = Jinja2Templates(directory="templates")

@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Optional
 
 import bcrypt
-from sqlmodel import Field, Relationship, SQLModel
-
-from .prediction import Prediction
-from .transaction import Transaction
+from sqlmodel import Field, SQLModel
 
 
 class User(SQLModel, table=True):
@@ -16,9 +13,6 @@ class User(SQLModel, table=True):
     role: str = Field(default="user")
     balance: float = Field(default=0.0)
     selected_model: Optional[str] = Field(default=None)
-
-    # transactions: List["Transaction"] = Relationship(back_populates="user")
-    # predictions: List["Prediction"] = Relationship(back_populates="user")
 
     def set_password(self, password: str):
         salt = bcrypt.gensalt()

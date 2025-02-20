@@ -2,6 +2,7 @@ import os
 
 from database.database import get_session
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from services.auth import get_current_user_api
 from services.crud.prediction import (create_prediction, get_model_by_id,
                                       get_next_prediction_id,
                                       get_prediction_by_id,
@@ -9,8 +10,6 @@ from services.crud.prediction import (create_prediction, get_model_by_id,
 from services.crud.user import get_user_by_id, update_user_balance
 from sqlalchemy.orm import Session
 from workers.publisher import publish_prediction_task
-
-from services.auth import get_current_user_api
 
 prediction_router = APIRouter(tags=["Prediction"])
 

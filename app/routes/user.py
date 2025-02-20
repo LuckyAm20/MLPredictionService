@@ -6,13 +6,12 @@ from database.models.user import User
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
+from services.auth import create_access_token, get_current_user_api
 from services.crud.transaction import create_transaction
 from services.crud.user import (create_user, get_all_users, get_user_by_id,
                                 get_user_by_username, update_user_balance,
                                 update_user_model)
 from sqlalchemy.orm import Session
-
-from services.auth import create_access_token, get_current_user_api
 
 user_router = APIRouter(tags=["User"])
 
@@ -89,7 +88,7 @@ async def select_model(data: ModelSelect, session: Session = Depends(get_session
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Пользователь не найден")
 
-    available_models = ["resnet50"]
+    available_models = ["resnet50", "efficientnet_b0"]
     if data.model not in available_models:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Выбранной модели не существует")
 

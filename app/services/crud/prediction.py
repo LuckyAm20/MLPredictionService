@@ -1,6 +1,7 @@
 from typing import Optional
 
-from database.models.user import Prediction, User
+from database.models.user import User
+from database.models.prediction import Prediction
 from models_class.enums import TaskStatus
 from sqlmodel import Session, func, select
 

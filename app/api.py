@@ -1,12 +1,11 @@
 import uvicorn
 from database.database import init_db
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from routes.prediction import prediction_router
 from routes.transaction import transaction_router
 from routes.user import user_router
 from routes.web import web_router
-from fastapi.staticfiles import StaticFiles
-
 
 app = FastAPI(title="ML Service API")
 app.mount("/static", StaticFiles(directory="static"), name="static")

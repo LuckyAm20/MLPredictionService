@@ -1,13 +1,13 @@
+import os
 from datetime import datetime, timedelta, timezone
+
+from database.database import get_session
+from fastapi import Depends, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import HTTPException, Depends, status
-from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
-from database.database import get_session
 from services.crud.user import get_user_by_id
-import os
-from fastapi import Request
+from sqlalchemy.orm import Session
 
 SECRET_KEY = os.getenv("SECRET_KEY", "mysecretkey")
 ALGORITHM = "HS256"

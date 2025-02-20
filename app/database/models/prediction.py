@@ -1,13 +1,9 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
-from sqlalchemy.orm import Mapped
-from sqlmodel import Field, Relationship, SQLModel
-
-if TYPE_CHECKING:
-    from .user import User
+from sqlmodel import Field, SQLModel
 
 
 class Prediction(SQLModel, table=True):
@@ -19,8 +15,6 @@ class Prediction(SQLModel, table=True):
     status: str = Field(default="pending")
     cost: float
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
-
-    # user: Optional[User] = Relationship(back_populates="predictions")
 
     def update_status(self, new_status: str):
         self.status = new_status

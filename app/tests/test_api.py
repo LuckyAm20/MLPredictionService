@@ -1,8 +1,9 @@
 import os
 import sys
 
-from pydantic import BaseModel
 from fastapi.testclient import TestClient
+from pydantic import BaseModel
+
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
 

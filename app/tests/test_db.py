@@ -1,5 +1,6 @@
-from services.crud.user import create_user, get_user_by_username, update_user_balance
 from services.crud.transaction import create_transaction
+from services.crud.user import (create_user, get_user_by_username,
+                                update_user_balance)
 
 
 def test_create_user(db_session):
