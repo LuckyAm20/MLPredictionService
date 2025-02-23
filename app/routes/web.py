@@ -108,7 +108,7 @@ async def register_user(request: Request, username: str = Form(...), password: s
     try:
         user = UserCreate(username=username, password=password)
         await signup(user, session)
-        return RedirectResponse(url="/dashboard", status_code=303)
+        return RedirectResponse(url="/login", status_code=303)
     except HTTPException as e:
         return templates.TemplateResponse("register.html", {"request": request, "error": e.detail})
 
