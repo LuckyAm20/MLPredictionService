@@ -46,8 +46,8 @@ async def deposit_balance_web(amount: int = Form(...), session: Session = Depend
 
 
 @web_router.post("/select_model")
-async def select_model(data: str = Form(...), session: Session = Depends(get_session), user=Depends(get_current_user)):
-    update_user_model(user, data, session)
+async def select_model(model: str = Form(...), session: Session = Depends(get_session), user=Depends(get_current_user)):
+    update_user_model(user, model, session)
     return RedirectResponse(url="/dashboard", status_code=303)
 
 
