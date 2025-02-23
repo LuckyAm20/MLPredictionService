@@ -21,9 +21,7 @@ async def predict(file: UploadFile = File(...), session: Session = Depends(get_s
 
     cost = 10
 
-    if user.balance >= cost:
-        update_user_balance(user.id, -cost, session)
-    else:
+    if user.balance < cost:
         raise HTTPException(status_code=404,
                             detail=f"Недостаточно средств. "
                                    f"Текущий баланс: {user.balance}, стоимость предсказания: {cost}.")
