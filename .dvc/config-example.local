@@ -1,0 +1,3 @@
+['remote "mlops2"']
+    access_key_id = {key}
+    secret_access_key = {key}

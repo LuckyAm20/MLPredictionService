@@ -1,0 +1,5 @@
+[core]
+    remote = mlops2
+['remote "mlops2"']
+    url = s3://mihail-aptukov-fpa4766/mlops2
+    endpointurl = https://s3.lab.karpov.courses

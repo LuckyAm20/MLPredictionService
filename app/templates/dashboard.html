@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+    <h2>Личный кабинет</h2>
+
+    <h3>Баланс: {{ balance }} &#128176;</h3>
+    <form method="post" action="/balance">
+        <input type="number" name="amount" placeholder="Пополнить баланс" required>
+        <button type="submit">Пополнить</button>
+    </form>
+
+    <h3>Выбор модели</h3>
+    <form method="post" action="/select_model">
+        <select name="model">
+            <option value="resnet50">ResNet50</option>
+            <option value="efficientnet_b0">EfficientNet-B0</option>
+        </select>
+        <button type="submit">Выбрать</button>
+    </form>
+
+    <h3>Выполнить предикт</h3>
+    <p>Стоимость: 10 &#128176;</p>
+    <form method="post" action="/predict" enctype="multipart/form-data" id="predict-form">
+        <input type="file" name="file" id="file-input" required>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <h4>Загруженное изображение:</h4>
+    <img id="image-preview" src="" alt="Изображение появится после загрузки" style="display:none; max-width: 300px; margin-top: 10px;">
+
+     <h3>Последний предикт</h3>
+    <div id="last-prediction">
+        {% if predictions %}
+            <p><strong>Дата:</strong> {{ predictions[0].timestamp }}</p>
+            <p><strong>Результат:</strong> {{ predictions[0].result }}</p>
+        {% else %}
+            <p>Нет данных</p>
+        {% endif %}
+    </div>
+    <button id="refresh-prediction">Запросить ответ</button>
+
+    <h3>История предсказаний</h3>
+    <ul id="predictions-list">
+        {% for prediction in predictions[:5] %}
+            <li>{{ prediction.timestamp }} - {{ prediction.result }}</li>
+        {% endfor %}
+    </ul>
+    {% if predictions|length > 5 %}
+        <button id="show-all-predictions">Показать все</button>
+    {% endif %}
+
+    <h3>История транзакций</h3>
+    <ul id="transactions-list">
+        {% for transaction in transactions[:5] %}
+            <li>{{ transaction.timestamp }} - {{ transaction.amount }} &#128176;</li>
+        {% endfor %}
+    </ul>
+    {% if transactions|length > 5 %}
+        <button id="show-all-transactions">Показать все</button>
+    {% endif %}
+
+    <script>
+        document.getElementById("file-input").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById("image-preview");
+                    img.src = e.target.result;
+                    img.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById("refresh-prediction").addEventListener("click", function() {
+            location.reload();
+        });
+
+        document.getElementById("show-all-predictions")?.addEventListener("click", function() {
+            document.getElementById("predictions-list").innerHTML = `
+                {% for prediction in predictions %}
+                    <li>{{ prediction.timestamp }} - {{ prediction.result }}</li>
+                {% endfor %}
+            `;
+            this.style.display = "none";
+        });
+
+        document.getElementById("show-all-transactions")?.addEventListener("click", function() {
+            document.getElementById("transactions-list").innerHTML = `
+                {% for transaction in transactions %}
+                    <li>{{ transaction.timestamp }} - {{ transaction.amount }} &#128176;</li>
+                {% endfor %}
+            `;
+            this.style.display = "none";
+        });
+    </script>
+
+{% endblock %}

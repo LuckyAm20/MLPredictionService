@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ML Сервис{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" type="image/png" href="/static/favicon.ico">
+</head>
+<body>
+    <nav>
+        <ul>
+            {% if user %}
+                <li>
+    <form action="/dashboard" method="get" style="display: inline;">
+        <button type="submit" style="background: none; border: none; color: blue; cursor: pointer; font-size: inherit; font-family: inherit;">
+            Личный кабинет
+        </button>
+    </form>
+</li>
+
+                <li>
+    <form action="/logout" method="post" style="display: inline;">
+        <button type="submit" style="background: none; border: none; color: blue; cursor: pointer;">Выход</button>
+    </form>
+</li>
+
+
+            {% endif %}
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
