@@ -9,8 +9,8 @@
 
 ### 1️⃣ **Клонирование репозитория**
 ```bash
-git clone https://git.lab.karpov.courses/mihail-aptukov-fpa4766/mlops-project-service.git
-cd mlops-project-service
+git clone https://github.com/LuckyAm20/MLPredictionService.git
+cd MLPredictionService
 ```
 
 ### 2️⃣ **Настройка DVC**
